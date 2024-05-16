@@ -1,11 +1,19 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
-
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return 'Working'
+
+@app.route('/webhook', methods=['GET'])
+def webhook():
+    if request.method == "GET":
+        if request.args.get("hub.verify_token") == "hologo":
+            return request.args.get("hub.challenge")
+        else:
+            return request
+        
 
 @app.route('/instagram/messages')
 def instagram_messages():
